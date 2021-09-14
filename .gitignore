@@ -1,0 +1,8 @@
+# vscode specific
+.vscode/
+
+# visual studio specific
+*.pdb
+
+# project specific
+build/
