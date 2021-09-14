@@ -1,3 +1,3 @@
-# cmake-template
+# OpenGL Game Engine?
 
-Starting point for a cmake project with some helper batch files for windows.
+Not yet sure of the direction of this project. Let's call it a game engine for now.

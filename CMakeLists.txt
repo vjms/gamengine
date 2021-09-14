@@ -1,16 +1,57 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.5)
 
-project(proj)
+project(proj CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_BUILD_TYPE "Debug")
 
+# Set compiler warnings
 if (MSVC)
     add_compile_options(/W4 /WX)
 else()
     add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
-add_subdirectory(src)
+# Conan setup
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+  message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+  file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.16.1/conan.cmake"
+                "${CMAKE_BINARY_DIR}/conan.cmake"
+                EXPECTED_HASH SHA256=396e16d0f5eabdc6a14afddbcfff62a54a7ee75c6da23f32f7a31bc85db23484
+                TLS_VERIFY ON)
+endif()
+
+include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+conan_cmake_configure(  
+    REQUIRES fmt/7.1.3
+    REQUIRES glfw/3.3.4
+    GENERATORS cmake_find_package
+    )
+
+conan_cmake_autodetect(settings)
+
+conan_cmake_install(PATH_OR_REFERENCE .
+                    BUILD missing
+                    REMOTE conan-center
+                    SETTINGS ${settings})
+
+
+
+# Executable
+add_subdirectory(src)
 add_executable(${PROJECT_NAME} src/main.cpp)
+
+
+# Libraries
+find_package(fmt)
+find_package(glfw3)
+find_package(OpenGL)
+target_link_libraries(${PROJECT_NAME} fmt::fmt glfw opengl32)
+
+# Suppress 4099 warning
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")
