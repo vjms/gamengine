@@ -27,15 +27,9 @@ endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 
-conan_cmake_configure(  
-    REQUIRES fmt/7.1.3
-    REQUIRES glfw/3.3.4
-    GENERATORS cmake_find_package
-    )
-
 conan_cmake_autodetect(settings)
 
-conan_cmake_install(PATH_OR_REFERENCE .
+conan_cmake_install(PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
                     BUILD missing
                     REMOTE conan-center
                     SETTINGS ${settings})
@@ -51,7 +45,9 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 find_package(fmt)
 find_package(glfw3)
 find_package(OpenGL)
-target_link_libraries(${PROJECT_NAME} fmt::fmt glfw opengl32)
+find_package(glad)
+find_package(glm)
+target_link_libraries(${PROJECT_NAME} fmt::fmt glfw::glfw glad::glad opengl32 glm::glm)
 
 # Suppress 4099 warning
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")
