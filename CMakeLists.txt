@@ -35,6 +35,8 @@ conan_cmake_install(PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
                     SETTINGS ${settings})
 
 
+# Tests
+add_subdirectory(test)
 
 # Executable
 add_subdirectory(src)
