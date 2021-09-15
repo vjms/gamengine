@@ -6,4 +6,4 @@ find_package(glad)
 find_package(glm)
 target_link_libraries(gl_load_test glfw::glfw glad::glad opengl32 glm::glm)
 # Suppress 4099 warning
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")
+set_target_properties(gl_load_test PROPERTIES LINK_FLAGS "/ignore:4099")
