@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.13)
 
 project(proj CXX)
 
@@ -35,12 +35,14 @@ conan_cmake_install(PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
                     SETTINGS ${settings})
 
 
-# Tests
-add_subdirectory(test)
 
 # Executable
+add_executable(${PROJECT_NAME})
 add_subdirectory(src)
-add_executable(${PROJECT_NAME} src/main.cpp)
+
+
+# Tests
+#add_subdirectory(test)
 
 
 # Libraries
