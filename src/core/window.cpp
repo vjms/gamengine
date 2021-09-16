@@ -72,17 +72,29 @@ void Window::close()
 	s_active_windows -= 1;
 }
 
-void Window::swap_buffers()
+void Window::clear() const
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Window::refresh() const
+{
+	swap_buffers();
+	poll_events();
+}
+
+void Window::swap_buffers() const
 {
 	glfwSwapBuffers(m_window);
 }
 
-void Window::poll_events()
+void Window::poll_events() const
 {
 	glfwPollEvents();
 }
 
-void Window::make_context_current()
+void Window::make_context_current() const
 {
 	glfwMakeContextCurrent(m_window);
 }

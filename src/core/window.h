@@ -24,14 +24,17 @@ public:
 	// Closes the window. Explicit calling not necessary, as the destructor calls this when needed.
 	void close();
 
-	void swap_buffers();
-	void poll_events();
-	void make_context_current();
+	void clear() const;
+	void make_context_current() const;
+	void refresh() const;
 	[[nodiscard]] bool is_current_context() const;
 
 private:
 	// GLFW window handle.
 	GLFWwindow *m_window = nullptr;
+
+	void swap_buffers() const;
+	void poll_events() const;
 
 private:
 	// Count the number of active windows as they are created and destroyed,

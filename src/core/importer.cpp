@@ -45,13 +45,18 @@ StaticMesh load_static_mesh(const std::string &path)
 	{
 		auto mesh = scene->mMeshes[i];
 		std::vector<glm::vec3> vertices;
-		std::for_each(mesh->mVertices, &mesh->mVertices[mesh->mNumVertices], [&](auto vertex)
+		std::for_each(mesh->mVertices, &mesh->mVertices[mesh->mNumVertices], [&](const aiVector3D &vertex)
 					  { vertices.emplace_back(vertex.x, vertex.y, vertex.z); });
-		for (auto &vertex : vertices)
-		{
-			fmt::print("{}\n", vertex);
-		}
-		// sm.add_mesh(Mesh{});
+
+		std::vector<uint32_t> indices;
+		std::for_each(mesh->mFaces, &mesh->mFaces[mesh->mNumFaces], [&](const aiFace &face)
+					  { std::for_each(face.mIndices, &face.mIndices[face.mNumIndices], [&](const unsigned int &index)
+									  { indices.emplace_back(index); }); });
+
+		std::vector<glm::vec3> normals;
+		std::for_each(mesh->mNormals, &mesh->mNormals[mesh->mNumVertices], [&](const aiVector3D &normal)
+					  { normals.emplace_back(normal.x, normal.y, normal.z); });
+		sm.add_mesh(Mesh{vertices, normals, indices});
 	}
 	return sm;
 }
