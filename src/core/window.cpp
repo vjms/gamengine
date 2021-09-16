@@ -4,12 +4,12 @@
 
 #include <mutex>
 
-int Window::m_active_windows = 0;
-bool Window::m_opengl_initialized = false;
+int Window::s_active_windows = 0;
+bool Window::s_opengl_initialized = false;
 
 bool Window::glfw_initialize()
 {
-	if (m_opengl_initialized)
+	if (s_opengl_initialized)
 	{
 		return true;
 	}
@@ -19,7 +19,7 @@ bool Window::glfw_initialize()
 		return false;
 	}
 	glfwSetErrorCallback(Window::error_callback);
-	m_opengl_initialized = true;
+	s_opengl_initialized = true;
 	return true;
 }
 
@@ -27,7 +27,7 @@ Window::Window()
 {
 	if (glfw_initialize())
 	{
-		m_active_windows += 1;
+		s_active_windows += 1;
 		m_window = glfwCreateWindow(640, 480, "Test", NULL, NULL);
 		make_context_current();
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -48,10 +48,10 @@ Window::~Window()
 	{
 		close();
 	}
-	if (m_active_windows == 0)
+	if (s_active_windows == 0)
 	{
 		glfwTerminate();
-		m_opengl_initialized = false;
+		s_opengl_initialized = false;
 	}
 }
 
@@ -69,7 +69,7 @@ void Window::close()
 {
 	glfwDestroyWindow(m_window);
 	m_window = nullptr;
-	m_active_windows -= 1;
+	s_active_windows -= 1;
 }
 
 void Window::swap_buffers()

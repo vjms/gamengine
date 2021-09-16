@@ -1,5 +1,4 @@
-#ifndef _WINDOW_H
-#define _WINDOW_H
+#pragma once
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -14,9 +13,6 @@
 */
 class Window
 {
-private:
-	GLFWwindow *m_window = nullptr;
-
 public:
 	Window();
 	~Window();
@@ -34,20 +30,22 @@ public:
 	[[nodiscard]] bool is_current_context() const;
 
 private:
+	// GLFW window handle.
+	GLFWwindow *m_window = nullptr;
+
+private:
 	// Count the number of active windows as they are created and destroyed,
 	// and when it reaches 0, call glfwterminate from the destructor
-	static int m_active_windows;
+	static int s_active_windows;
 
 	// OpenGL Initialization
-	static bool m_opengl_initialized;
+	static bool s_opengl_initialized;
 	static bool glfw_initialize();
 
 	// OpenGL Callbacks
 	static void error_callback(int error, const char *description);
 	static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
-	static void mouse_button_callback(GLFWwindow * window, int button, int action, int mods );
+	static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 	static void cursor_position_callback(GLFWwindow *window, double xpos, double ypos);
 	static void cursor_enter_callback(GLFWwindow *window, int entered);
 };
-
-#endif // _WINDOW_H

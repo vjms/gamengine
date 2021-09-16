@@ -51,7 +51,11 @@ find_package(glfw3)
 find_package(OpenGL)
 find_package(glad)
 find_package(glm)
-target_link_libraries(${PROJECT_NAME} fmt::fmt glfw::glfw glad::glad opengl32 glm::glm)
+find_package(assimp)
+target_link_libraries(${PROJECT_NAME} fmt::fmt glfw::glfw glad::glad opengl32 glm::glm assimp::assimp)
 
 # Suppress 4099 warning
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")
+
+# Copy the assets to the debug folder for now.
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/debug)
