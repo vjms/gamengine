@@ -1,4 +1,4 @@
-#include "resource_loader.h"
+#include "importer.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

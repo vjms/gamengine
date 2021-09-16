@@ -1,5 +1,5 @@
 #include "core/window.h"
-#include "core/resource_loader.h"
+#include "core/importer.h"
 #include "core/staticmesh.h"
 
 #include <memory>
