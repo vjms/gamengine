@@ -4,11 +4,15 @@ project(proj CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_BUILD_TYPE "debug")
+set(CMAKE_BUILD_TYPE "Debug")
 
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set compiler warnings
 if (MSVC)
+    #SET (CMAKE_CXX_FLAGS_DEBUG "/W4 /WX /EHsc")
+    #SET (CMAKE_CXX_FLAGS_RELEASE "/W4 /WX /O2")
+    #STRING (REGEX REPLACE "/RTC(su|[1su])" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS}")
     add_compile_options(/W4 /WX)
     #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /RTCs /O2")
 
@@ -57,7 +61,7 @@ find_package(OpenGL)
 find_package(glad)
 find_package(glm)
 find_package(assimp)
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
     fmt::fmt 
     glfw::glfw 
     glad::glad 
