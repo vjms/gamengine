@@ -46,7 +46,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	VertexShader vert{};
 	auto prog = std::make_shared<ShaderProgram>();
 
-	fmt::print("{}\n", frag.compile(fragmentsource));
+	frag.compile(fragmentsource);
 	vert.compile(vertexsource);
 	prog->attach(frag);
 	prog->attach(vert);

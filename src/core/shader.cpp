@@ -6,9 +6,9 @@
 
 bool Shader::compile(const char *source)
 {
-	fmt::print("{}\n", get_opengl_shader_type());
 	m_handle = glCreateShader(get_opengl_shader_type());
 	glShaderSource(m_handle, 1, &source, nullptr);
+	glCompileShader(m_handle);
 	GLint success = 0;
 	glGetShaderiv(m_handle, GL_COMPILE_STATUS, &success);
 	if (!success)
