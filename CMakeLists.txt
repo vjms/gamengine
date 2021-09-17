@@ -4,14 +4,19 @@ project(proj CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE "debug")
+
 
 # Set compiler warnings
 if (MSVC)
     add_compile_options(/W4 /WX)
+    #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /RTCs /O2")
+
 else()
     add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
+
+
 
 # Conan setup
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -52,7 +57,13 @@ find_package(OpenGL)
 find_package(glad)
 find_package(glm)
 find_package(assimp)
-target_link_libraries(${PROJECT_NAME} fmt::fmt glfw::glfw glad::glad opengl32 glm::glm assimp::assimp)
+target_link_libraries(${PROJECT_NAME} 
+    fmt::fmt 
+    glfw::glfw 
+    glad::glad 
+    opengl32 
+    glm::glm 
+    assimp::assimp)
 
 # Suppress 4099 warning
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")

@@ -6,8 +6,11 @@
 #include <string>
 
 #include "renderable.h"
+#include "shader.h"
 
 #include <glad/glad.h>
+
+#include <memory>
 
 static inline const char *vertexShaderSource = "#version 330 core\n"
 											   "layout (location = 0) in vec3 aPos;\n"
@@ -30,25 +33,11 @@ public:
 
 	virtual void render() const override
 	{
-
-		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-		glCompileShader(vertexShader);
-
-		unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-		glCompileShader(fragmentShader);
-
-		unsigned int shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-
 		unsigned int VAO;
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
 
-		glUseProgram(shaderProgram);
+		glUseProgram(m_shader->get_handle());
 		unsigned int VBO;
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -64,7 +53,13 @@ public:
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
 
+	void set_shader(const std::shared_ptr<ShaderProgram> &shader)
+	{
+		m_shader = shader;
+	}
+
 private:
+	std::shared_ptr<ShaderProgram> m_shader;
 	std::string m_name;
 	std::vector<glm::vec3> m_vertices;
 	std::vector<glm::vec3> m_normals;
@@ -85,6 +80,14 @@ public:
 		for (auto &mesh : m_meshes)
 		{
 			mesh.render();
+		}
+	}
+
+	void set_shader(const std::shared_ptr<ShaderProgram> &shader)
+	{
+		for (auto &mesh : m_meshes)
+		{
+			mesh.set_shader(shader);
 		}
 	}
 

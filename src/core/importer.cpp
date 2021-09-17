@@ -27,7 +27,7 @@ struct fmt::formatter<glm::vec3>
 	}
 };
 
-StaticMesh load_static_mesh(const std::string &path)
+StaticMesh Importer::load_static_mesh(const std::string &path)
 {
 	Assimp::Importer importer{};
 	auto scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
