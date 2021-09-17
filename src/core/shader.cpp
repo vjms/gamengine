@@ -1,12 +1,11 @@
 #include "shader.h"
 
-#include <glad/glad.h>
-
 #include <fmt/format.h>
+
+#include <glad/glad.h>
 
 bool Shader::compile(const char *source)
 {
-	m_handle = glCreateShader(get_opengl_shader_type());
 	glShaderSource(m_handle, 1, &source, nullptr);
 	glCompileShader(m_handle);
 	GLint success = 0;
@@ -20,6 +19,17 @@ bool Shader::compile(const char *source)
 	return success;
 }
 
+Shader::Shader(Shader::Type type)
+{
+	m_handle = glCreateShader(type_to_gl(type));
+}
+
+Shader::Shader(Type type, const char *source)
+	: Shader(type)
+{
+	compile(source);
+}
+
 Shader::~Shader()
 {
 	if (m_handle != 0)
@@ -29,14 +39,16 @@ Shader::~Shader()
 	}
 }
 
-unsigned int VertexShader::get_opengl_shader_type() const
+unsigned int Shader::type_to_gl(Type type)
 {
-	return GL_VERTEX_SHADER;
-}
-
-unsigned int FragmentShader::get_opengl_shader_type() const
-{
-	return GL_FRAGMENT_SHADER;
+	switch (type)
+	{
+	case Type::Vertex:
+		return GL_VERTEX_SHADER;
+	case Type::Fragment:
+		return GL_FRAGMENT_SHADER;
+	}
+	return 0;
 }
 
 ShaderProgram::ShaderProgram()
@@ -44,9 +56,17 @@ ShaderProgram::ShaderProgram()
 	m_handle = glCreateProgram();
 }
 
-void ShaderProgram::attach(const Shader &shader)
+ShaderProgram::ShaderProgram(const std::shared_ptr<Shader> &vertex_shader, const std::shared_ptr<Shader> &fragment_shader) : ShaderProgram()
 {
-	glAttachShader(m_handle, shader.get_handle());
+	attach(vertex_shader);
+	attach(fragment_shader);
+	link();
+}
+
+void ShaderProgram::attach(const std::shared_ptr<Shader> &shader)
+{
+	m_shaders.emplace_back(shader);
+	glAttachShader(m_handle, shader->get_handle());
 }
 
 bool ShaderProgram::link()

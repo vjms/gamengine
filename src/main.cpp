@@ -42,16 +42,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 	Switch sw{};
 	Importer importer{};
 
-	FragmentShader frag{};
-	VertexShader vert{};
-	auto prog = std::make_shared<ShaderProgram>();
-
-	frag.compile(fragmentsource);
-	vert.compile(vertexsource);
-	prog->attach(frag);
-	prog->attach(vert);
-	prog->link();
-
+	auto vertex = std::make_shared<Shader>(Shader::Type::Vertex, vertexsource);
+	auto fragment = std::make_shared<Shader>(Shader::Type::Fragment, fragmentsource);
+	auto prog = std::make_shared<ShaderProgram>(vertex, fragment);
 	auto mesh = importer.load_static_mesh("assets/cube.fbx");
 	mesh.set_shader(prog);
 
