@@ -4,7 +4,29 @@
 
 #include <glad/glad.h>
 
-bool Shader::compile(const char *source)
+template <>
+struct fmt::formatter<Shader::Type>
+{
+	constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin())
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	auto format(const Shader::Type type, FormatContext &ctx) -> decltype(ctx.out())
+	{
+		switch (type)
+		{
+		case Shader::Type::Fragment:
+			return format_to(ctx.out(), "Fragment");
+		case Shader::Type::Vertex:
+			return format_to(ctx.out(), "Vertex");
+		}
+		return ctx.out();
+	}
+};
+
+bool Shader::compile(const char *source, bool print_log)
 {
 	glShaderSource(m_handle, 1, &source, nullptr);
 	glCompileShader(m_handle);
@@ -12,22 +34,32 @@ bool Shader::compile(const char *source)
 	glGetShaderiv(m_handle, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		char log[512];
-		glGetShaderInfoLog(m_handle, 512, nullptr, log);
-		fmt::print(stderr, "Shader compilation failed.\n - Source: {}\n - Reason: {}\n", source, log);
+		GLint length = 0;
+		glGetShaderiv(m_handle, GL_INFO_LOG_LENGTH, &length);
+		m_log.reserve(length);
+		glGetShaderInfoLog(m_handle, length, nullptr, m_log.data());
 	}
+	if (print_log)
+	{
+		fmt::print("{} shader compilation: {}\n", m_type, success ? "Success" : "Failed");
+		if(!success){
+			fmt::print("Reason: {}\n", m_log);
+		}
+	}
+
 	return success;
 }
 
 Shader::Shader(Shader::Type type)
 {
+	m_type = type;
 	m_handle = glCreateShader(type_to_gl(type));
 }
 
-Shader::Shader(Type type, const char *source)
+Shader::Shader(Type type, const char *source, bool print_log)
 	: Shader(type)
 {
-	compile(source);
+	compile(source, print_log);
 }
 
 Shader::~Shader()

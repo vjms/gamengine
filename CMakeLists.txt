@@ -40,7 +40,7 @@ conan_cmake_autodetect(settings)
 
 conan_cmake_install(PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
                     BUILD missing
-                    REMOTE conan-center
+                    REMOTE conancenter
                     SETTINGS ${settings})
 
 
@@ -71,6 +71,3 @@ target_link_libraries(${PROJECT_NAME}
 
 # Suppress 4099 warning
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")
-
-# Copy the assets to the debug folder for now.
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR}/debug)
