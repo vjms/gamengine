@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE "Debug")
 
+add_definitions(-DGLM_FORCE_SILENT_WARNINGS)
+
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set compiler warnings
@@ -70,4 +72,4 @@ target_link_libraries(${PROJECT_NAME}
     assimp::assimp)
 
 # Suppress 4099 warning
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099 ")

@@ -48,8 +48,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
 	while (!window.should_close())
 	{
-		sw.toggle() ? window.clear() : mesh.render();
+		window.clear();
+		mesh.render();
 		window.refresh();
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }

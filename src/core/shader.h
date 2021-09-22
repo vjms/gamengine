@@ -22,8 +22,8 @@ public:
 	bool compile(const char *source, bool print_log = true);
 
 	unsigned int get_handle() const { return m_handle; };
-	const std::string &get_compile_log() { return m_log; }
-	Type get_type() { return m_type; }
+	const std::string &get_compile_log() const { return m_log; }
+	Type get_type() const { return m_type; }
 
 private:
 	unsigned int m_handle = 0;

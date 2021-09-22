@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <vector>
 #include <string>
@@ -50,7 +52,28 @@ public:
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 		glEnableVertexAttribArray(0);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f)); 
+
+		glm::mat4 view = glm::mat4(1.0f);
+		// note that we're translating the scene in the reverse direction of where we want to move
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+		int model_loc = glGetUniformLocation(m_shader->get_handle(), "model");
+		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
+
+		int view_loc = glGetUniformLocation(m_shader->get_handle(), "view");
+		glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
+
+		int projection_loc = glGetUniformLocation(m_shader->get_handle(), "projection");
+		glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection));
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 	}
 
 	void set_shader(const std::shared_ptr<ShaderProgram> &shader)
