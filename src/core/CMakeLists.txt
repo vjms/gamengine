@@ -4,4 +4,5 @@ target_sources(${PROJECT_NAME}
 						importer.cpp importer.h
 						shader.cpp shader.h
 						staticmesh.h
+						vertex.h
 )
