@@ -68,10 +68,9 @@ public:
     projection = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
     m_shader->use();
-    m_shader->set("model", 1, glm::value_ptr(model));
-    m_shader->set("projection", 1, glm::value_ptr(projection));
-    m_shader->set("view", 1, glm::value_ptr(view));
-
+    m_shader->set("model", 1, false, glm::value_ptr(model));
+    m_shader->set("projection", 1, false, glm::value_ptr(projection));
+    m_shader->set("view", 1, false, glm::value_ptr(view));
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
   }
 
