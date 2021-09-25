@@ -44,13 +44,25 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
   auto fragment = std::make_shared<Shader>(Shader::Type::Fragment, fg_shader.str().data());
   auto prog = std::make_shared<ShaderProgram>(vertex, fragment);
   auto mesh = importer.load_static_mesh("assets/cube.fbx");
+  auto mesh2 = importer.load_static_mesh("assets/cube.fbx");
+  auto mesh3 = importer.load_static_mesh("assets/cube.fbx");
+  auto mesh4 = importer.load_static_mesh("assets/cube.fbx");
   mesh.set_shader(prog);
+  mesh2.set_shader(prog);
+  mesh3.set_shader(prog);
+  mesh4.set_shader(prog);
 
 
-  while (!window.should_close())
-  {
-  	window.clear();
-  	mesh.render();
-  	window.refresh();
+  float angle = 0.f;
+  while (!window.should_close()) {
+    mesh.set_rotation(glm::vec3{ angle, 0.f, 0.f });
+    mesh2.set_rotation(glm::vec3{ 0.f, angle, 0.f });
+
+    mesh2.set_position(glm::vec3{ glm::sin(angle), glm::cos(angle), 0.f } * 3.f);
+    angle += 0.01f;
+    window.clear();
+    mesh.render();
+    mesh2.render();
+    window.refresh();
   }
 }
