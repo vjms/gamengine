@@ -8,6 +8,8 @@
 
 #include <glad/glad.h>
 
+#include <fmt/format.h>
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -19,7 +21,7 @@
 class Mesh : public Renderable
 {
 public:
-  Mesh(std::vector<Vertex> &vertices, std::vector<uint32_t> indices)
+  Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices)
     : m_vertices(vertices), m_indices(indices)
   {
     glGenVertexArrays(1, &m_vao);
@@ -32,12 +34,11 @@ public:
     glGenBuffers(1, &m_ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
-    
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
-
   };
 
   virtual void render() const override
@@ -70,7 +71,6 @@ private:
 class StaticMesh : public Renderable
 {
 public:
-  // todo: clean this shit up
   void add_mesh(Mesh mesh)
   {
     m_meshes.emplace_back(mesh);
@@ -144,9 +144,7 @@ public:
 
 private:
   glm::vec3 m_position = glm::vec3{ 0.f, 0.f, 0.f };
-  //glm::vec3 m_rotation = glm::vec3{ glm::radians(45.f), glm::radians(45.f), 0.f };
   glm::vec3 m_rotation = glm::vec3{ 0.f };
-  //glm::vec3 m_rotation = glm::vec3{ 0.f };
   glm::vec3 m_scale = glm::vec3{ 1.f };
 
   std::vector<Mesh> m_meshes;

@@ -13,7 +13,7 @@ bool Window::glfw_initialize()
     return true;
   }
   if (!glfwInit()) {
-    fmt::print("GLFW initialization failed\n");
+    fmt::print(stderr, "GLFW initialization failed\n");
     return false;
   }
   glfwSetErrorCallback(Window::error_callback);
@@ -28,7 +28,7 @@ Window::Window()
     m_window = glfwCreateWindow(640, 480, "Test", NULL, NULL);
     make_context_current();
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-      fmt::print("GLAD initialization failed\n");
+      fmt::print(stderr, "GLAD initialization failed\n");
     }
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, Window::key_callback);
@@ -99,6 +99,12 @@ bool Window::is_current_context() const
   return glfwGetCurrentContext() == m_window;
 }
 
+void Window::set_key_callback(std::function<void(const KeyEvent &)> kcb)
+{
+  m_key_callback = kcb;
+}
+
+
 // OpenGL Callbacks
 
 void Window::error_callback(int error, const char *description)
@@ -106,9 +112,20 @@ void Window::error_callback(int error, const char *description)
   fmt::print(stderr, "OpenGL Error {}: {}\n", error, description);
 }
 
-void Window::key_callback(GLFWwindow *window, [[maybe_unused]] int key, [[maybe_unused]] int scancode, [[maybe_unused]] int action, [[maybe_unused]] int mods)
+void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-  static_cast<Window *>(glfwGetWindowUserPointer(window));
+  auto custom = static_cast<Window *>(glfwGetWindowUserPointer(window));
+  custom->m_key_callback(
+    KeyEvent{
+      static_cast<KeyEvent::Key>(key),
+      scancode,
+      static_cast<KeyEvent::Action>(action),
+      static_cast<KeyEvent::Mod>(mods) });
+
+
+  // GLFW_PRESS
+  // GLFW_RELEASE
+  // GLFW_REPEAT
 }
 
 void Window::mouse_button_callback(GLFWwindow *window, [[maybe_unused]] int button, [[maybe_unused]] int action, [[maybe_unused]] int mods)
