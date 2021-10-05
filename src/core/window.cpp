@@ -99,11 +99,6 @@ bool Window::is_active() const
   return glfwGetCurrentContext() == m_window;
 }
 
-void Window::set_key_callback(std::function<void(const KeyEvent &)> kcb)
-{
-  m_key_callback = kcb;
-}
-
 
 // OpenGL Callbacks
 
@@ -115,17 +110,8 @@ void Window::error_callback(int error, const char *description)
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
   auto custom = static_cast<Window *>(glfwGetWindowUserPointer(window));
-  custom->m_key_callback(
-    KeyEvent{
-      static_cast<KeyEvent::Key>(key),
-      scancode,
-      static_cast<KeyEvent::Action>(action),
-      static_cast<KeyEvent::Mod>(mods) });
-
-
-  // GLFW_PRESS
-  // GLFW_RELEASE
-  // GLFW_REPEAT
+  auto event = KeyEvent{ key, scancode, action, mods };
+  custom->key_event_dispatcher.process(event);
 }
 
 void Window::mouse_button_callback(GLFWwindow *window, [[maybe_unused]] int button, [[maybe_unused]] int action, [[maybe_unused]] int mods)

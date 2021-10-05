@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 
+#include "event.h"
 #include "key_event.h"
 
 /**
@@ -31,13 +32,13 @@ public:
   void set_as_active() const;
   [[nodiscard]] bool is_active() const;
 
-  void set_key_callback(std::function<void(const KeyEvent &)> kcb);
+
+  EventDispatcher<KeyEvent> key_event_dispatcher{};
+
 
 private:
   // GLFW window handle.
   GLFWwindow *m_window = nullptr;
-
-  std::function<void(const KeyEvent &)> m_key_callback = [](const KeyEvent &) {};
 
   void swap_buffers() const;
   void poll_events() const;

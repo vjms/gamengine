@@ -3,7 +3,7 @@
 #include "core/staticmesh.h"
 #include "core/shader.h"
 #include "core/event.h"
-
+#include "core/key_event.h"
 
 #include <fmt/format.h>
 
@@ -27,12 +27,24 @@ private:
   bool m_state = false;
 };
 
+class TestObject : public EventListener<KeyEvent>
+{
+
+  void process(KeyEvent &event) override
+  {
+    fmt::print("{}\n", event.key);
+  }
+};
 
 class Test : public Application
 {
 public:
+  TestObject obj = {};
+
+
   Test()
   {
+    key_event_dispatcher.subscribe(&obj);
     Importer importer{};
 
     std::ifstream vx_shader_source("shader/test_vertex.glsl");

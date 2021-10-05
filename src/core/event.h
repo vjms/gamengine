@@ -11,7 +11,7 @@ class Event
 };
 
 template<typename T>
-concept EventType = std::is_base_of_v<T, Event>;
+concept EventType = std::is_base_of_v<Event, T>;
 
 template<EventType T>
 class EventDispatcher;
@@ -20,12 +20,12 @@ template<EventType T>
 class EventListener
 {
 public:
-  ~EventListener<T>()
+  virtual ~EventListener<T>()
   {
     unsubscribe();
   }
 
-  virtual void process([[maybe_unused]] T event){};
+  virtual void process([[maybe_unused]] T &event){};
 
 private:
   friend class EventDispatcher<T>;
@@ -35,11 +35,13 @@ private:
   }
   void unsubscribe()
   {
-    m_dispatcher->unsubscribe(this);
+    if (m_dispatcher)
+      m_dispatcher->unsubscribe(this);
+    m_dispatcher = nullptr;
   }
 
 private:
-  EventDispatcher<T> *m_dispatcher;
+  EventDispatcher<T> *m_dispatcher = nullptr;
 };
 
 template<EventType T>
@@ -55,7 +57,7 @@ public:
   {
     m_listeners.remove(listener);
   }
-  void process(T event) override
+  void process(T &event) override
   {
     for (auto &listener : m_listeners) {
       listener->process(event);

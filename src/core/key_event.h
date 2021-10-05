@@ -2,7 +2,9 @@
 
 #include <GLFW/glfw3.h>
 
-struct KeyEvent
+#include "event.h"
+
+struct KeyEvent : public Event
 {
   enum class Action {
     Released = GLFW_RELEASE,
@@ -142,6 +144,11 @@ struct KeyEvent
     NumLock = GLFW_MOD_NUM_LOCK,
   };
 
+  KeyEvent(int key_, int scancode_, int action_, int mods_)
+    : key(static_cast<Key>(key_)), scancode(scancode_), action(static_cast<Action>(action_)), mods(static_cast<Mod>(mods_))
+  {}
+
+  
   Key key;
   int scancode;
   Action action;
