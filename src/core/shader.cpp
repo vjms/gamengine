@@ -120,14 +120,14 @@ bool ShaderProgram::link()
     buf.resize(max_length);
     glGetActiveUniform(m_handle, static_cast<GLuint>(i), max_length, &length, &size, &type, buf.data());
     buf.resize(length);
-    fmt::print("max: {}, length: {}, size: {}, type: {}, name: {}\n", max_length, length, size, type, buf);
+    // fmt::print("max: {}, length: {}, size: {}, type: {}, name: {}\n", max_length, length, size, type, buf);
     auto location = glGetUniformLocation(m_handle, buf.data());
     m_uniforms[buf.substr(0, buf.find('['))] = Uniform{ type, size, location };
   }
 
-  for (const auto &[key, val] : m_uniforms) {
-    fmt::print("{} {} {} {}\n", key, val.location, val.size, val.type);
-  }
+  // for (const auto &[key, val] : m_uniforms) {
+  //   fmt::print("{} {} {} {}\n", key, val.location, val.size, val.type);
+  // }
   return success;
 }
 
@@ -139,7 +139,7 @@ void ShaderProgram::use() const
 
 bool ShaderProgram::set(std::string_view name, GLsizei count, bool transpose, const float *value) const
 {
-  
+
   auto iter = m_uniforms.find(name.data());
   if (iter == m_uniforms.end()) { return false; }
   auto &u = iter->second;

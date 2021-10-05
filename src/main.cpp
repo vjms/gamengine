@@ -72,12 +72,8 @@ private:
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
   Test app1{};
-  app1.set_name("app1");
-  Test app2{};
-  app2.set_name("app2");
 
   while (!app1.should_close()) {
     app1.handle();
-    app2.handle();
   }
 }

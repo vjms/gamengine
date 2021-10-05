@@ -5,11 +5,11 @@
 #include <mutex>
 
 int Window::s_active_windows = 0;
-bool Window::s_opengl_initialized = false;
+bool Window::s_glfw_initialized = false;
 
 bool Window::glfw_initialize()
 {
-  if (s_opengl_initialized) {
+  if (s_glfw_initialized) {
     return true;
   }
   if (!glfwInit()) {
@@ -17,7 +17,7 @@ bool Window::glfw_initialize()
     return false;
   }
   glfwSetErrorCallback(Window::error_callback);
-  s_opengl_initialized = true;
+  s_glfw_initialized = true;
   return true;
 }
 
@@ -26,7 +26,7 @@ Window::Window()
   if (glfw_initialize()) {
     s_active_windows += 1;
     m_window = glfwCreateWindow(640, 480, "Test", NULL, NULL);
-    make_context_current();
+    set_as_active();
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
       fmt::print(stderr, "GLAD initialization failed\n");
     }
@@ -45,7 +45,7 @@ Window::~Window()
   }
   if (s_active_windows == 0) {
     glfwTerminate();
-    s_opengl_initialized = false;
+    s_glfw_initialized = false;
   }
 }
 
@@ -89,12 +89,12 @@ void Window::poll_events() const
   glfwPollEvents();
 }
 
-void Window::make_context_current() const
+void Window::set_as_active() const
 {
   glfwMakeContextCurrent(m_window);
 }
 
-bool Window::is_current_context() const
+bool Window::is_active() const
 {
   return glfwGetCurrentContext() == m_window;
 }

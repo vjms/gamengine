@@ -13,12 +13,12 @@ class Application
 public:
   Application()
   {
-    m_window.make_context_current();
+    m_window.set_as_active();
     m_window.set_key_callback([&](const KeyEvent &key) { key_callback(key); });
   }
   void handle()
   {
-    m_window.make_context_current();
+    m_window.set_as_active();
     m_window.clear();
     dowork_impl();
     m_window.refresh();

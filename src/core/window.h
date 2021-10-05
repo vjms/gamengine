@@ -27,9 +27,9 @@ public:
   // Closes the window. Explicit calling not necessary, as the destructor calls this when needed.
   void close();
   void clear() const;
-  void make_context_current() const;
   void refresh() const;
-  [[nodiscard]] bool is_current_context() const;
+  void set_as_active() const;
+  [[nodiscard]] bool is_active() const;
 
   void set_key_callback(std::function<void(const KeyEvent &)> kcb);
 
@@ -47,11 +47,11 @@ private: /* Static functionality */
   // and when it reaches 0, call glfwterminate from the destructor
   static int s_active_windows;
 
-  // OpenGL Initialization
-  static bool s_opengl_initialized;
+  // GLFW Initialization
+  static bool s_glfw_initialized;
   static bool glfw_initialize();
 
-  // OpenGL Callbacks
+  // GLFW Callbacks
   static void error_callback(int error, const char *description);
   static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
   static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
