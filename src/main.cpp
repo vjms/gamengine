@@ -107,14 +107,6 @@ private:
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-
-  EventDispatcher<Event> dp{};
-
-  EventListener<Event> l{};
-
-  dp.subscribe(&l);
-
-
   Test app1{};
 
   while (!app1.should_close()) {

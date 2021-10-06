@@ -25,8 +25,8 @@ public:
     unsubscribe();
   }
 
-  virtual void process([[maybe_unused]] T &event){};
-  virtual bool filter() { return true; };
+  virtual void process(T &event) = 0;
+  virtual bool filter(T &event) { return true; };
 
 private:
   friend class EventDispatcher<T>;
