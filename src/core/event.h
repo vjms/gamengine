@@ -26,7 +26,7 @@ public:
   }
 
   virtual void process(T &event) = 0;
-  virtual bool filter(T &event) { return true; };
+  virtual bool filter([[maybe_unused]] T &event) { return true; };
 
 private:
   friend class EventDispatcher<T>;
@@ -61,7 +61,7 @@ public:
   void process(T &event) override
   {
     for (auto &listener : m_listeners) {
-      if (listener->filter()) listener->process(event);
+      if (listener->filter(event)) listener->process(event);
     }
   };
 
