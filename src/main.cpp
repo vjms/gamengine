@@ -27,24 +27,47 @@ private:
   bool m_state = false;
 };
 
-class TestObject : public EventListener<KeyEvent>
+class TestEvent : public Event
+{
+};
+
+class TestObject
+  : public EventListener<KeyEvent>
+  , public EventListener<TestEvent>
 {
 
   void process(KeyEvent &event) override
   {
     fmt::print("{}\n", event.key);
   }
+
+  void process([[maybe_unused]] TestEvent &event) override
+  {
+    fmt::print("testevent\n");
+  }
 };
 
 class Test : public Application
+  , EventListener<KeyEvent>
 {
 public:
   TestObject obj = {};
 
+  EventDispatcher<TestEvent> test_event_dispatcher{};
+
+  void process(KeyEvent &event) override
+  {
+    if (event.key == KeyEvent::Key::A) {
+      TestEvent te{};
+      test_event_dispatcher.process(te);
+    }
+  }
 
   Test()
   {
+    key_event_dispatcher.subscribe(this);
     key_event_dispatcher.subscribe(&obj);
+    test_event_dispatcher.subscribe(&obj);
     Importer importer{};
 
     std::ifstream vx_shader_source("shader/test_vertex.glsl");
