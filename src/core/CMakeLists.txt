@@ -6,4 +6,5 @@ target_sources(${PROJECT_NAME}
 						shader.cpp shader.h
 						staticmesh.h
 						vertex.h
+						node.h
 )

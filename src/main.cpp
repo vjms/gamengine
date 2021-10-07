@@ -4,6 +4,7 @@
 #include "core/shader.h"
 #include "core/event.h"
 #include "core/key_event.h"
+#include "core/node.h"
 
 #include <fmt/format.h>
 
