@@ -4,7 +4,6 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/trigonometric.hpp>
 
 #include <glad/glad.h>
 
@@ -15,6 +14,7 @@
 #include <string>
 
 #include "renderable.h"
+#include "node.h"
 #include "shader.h"
 #include "vertex.h"
 
@@ -40,6 +40,8 @@ public:
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
   };
+
+  virtual bool is_visible() const override { return true; }
 
   virtual void render() const override
   {
@@ -68,7 +70,7 @@ private:
   std::vector<uint32_t> m_indices;
 };
 
-class StaticMesh : public Renderable
+class StaticMesh : public TNode<Renderable>
 {
 public:
   void add_mesh(Mesh mesh)
@@ -113,6 +115,7 @@ public:
     m_scale = scale;
   }
 
+  virtual bool is_visible() const override { return true; }
   virtual void render() const override
   {
 

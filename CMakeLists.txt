@@ -72,4 +72,4 @@ target_link_libraries(${PROJECT_NAME}
     assimp::assimp)
 
 # Suppress 4099 warning
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099 ")
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/ignore:4099")

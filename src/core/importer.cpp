@@ -8,6 +8,7 @@
 
 #include <fmt/format.h>
 #include <algorithm>
+#include <memory>
 
 #include "staticmesh.h"
 
@@ -35,7 +36,7 @@ glm::vec3 to_glm(const aiVector3D &vec)
   return glm::vec3{ vec.x, vec.y, vec.z };
 }
 
-StaticMesh Importer::load_static_mesh(const std::string &path)
+std::shared_ptr<StaticMesh> Importer::load_static_mesh(const std::string &path)
 {
   Assimp::Importer importer{};
   auto scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -46,7 +47,7 @@ StaticMesh Importer::load_static_mesh(const std::string &path)
     fmt::print(stderr, "No meshes in {}\n", path);
   }
 
-  StaticMesh sm{};
+  auto sm = std::make_shared<StaticMesh>();
 
   for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
     auto mesh = scene->mMeshes[i];
@@ -57,7 +58,7 @@ StaticMesh Importer::load_static_mesh(const std::string &path)
     std::vector<uint32_t> indices;
     std::for_each(mesh->mFaces, &mesh->mFaces[mesh->mNumFaces], [&](const aiFace &face) { std::for_each(face.mIndices, &face.mIndices[face.mNumIndices], [&](const unsigned int &index) { indices.emplace_back(index); }); });
 
-    sm.add_mesh(Mesh{ vertices, indices });
+    sm->add_mesh(Mesh{ vertices, indices });
   }
   return sm;
 }

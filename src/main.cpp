@@ -5,6 +5,7 @@
 #include "core/event.h"
 #include "core/key_event.h"
 #include "core/node.h"
+#include "core/camera.h"
 
 #include <fmt/format.h>
 
@@ -84,26 +85,28 @@ public:
     auto prog = std::make_shared<ShaderProgram>(vertex, fragment);
     mesh = importer.load_static_mesh("assets/cube.fbx");
     mesh2 = importer.load_static_mesh("assets/cone.fbx");
-    mesh.set_shader(prog);
-    mesh2.set_shader(prog);
+    mesh->set_shader(prog);
+    mesh2->set_shader(prog);
+    m_viewport.add_child(mesh);
+    m_viewport.add_child(mesh2);
   }
 
 
   void dowork_impl() override
   {
-    mesh.set_rotation(glm::vec3{ angle, 0.f, 0.f });
-    mesh2.set_rotation(glm::vec3{ 0.f, angle, 0.f });
+    mesh->set_rotation(glm::vec3{ angle, 0.f, 0.f });
+    mesh2->set_rotation(glm::vec3{ 0.f, angle, 0.f });
 
-    mesh2.set_position(glm::vec3{ glm::sin(angle), glm::cos(angle), 0.f } * 3.f);
+    mesh2->set_position(glm::vec3{ glm::sin(angle), glm::cos(angle), 0.f } * 3.f);
     angle += 0.01f;
-    mesh.render();
-    mesh2.render();
+    mesh->render();
+    mesh2->render();
   }
 
 private:
   float angle = 0.f;
-  StaticMesh mesh;
-  StaticMesh mesh2;
+  std::shared_ptr<StaticMesh> mesh;
+  std::shared_ptr<StaticMesh> mesh2;
 };
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])

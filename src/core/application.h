@@ -6,7 +6,7 @@
 
 #include "window.h"
 #include "key_event.h"
-
+#include "viewport.h"
 
 class Application
 {
@@ -33,6 +33,7 @@ public:
 protected:
   virtual void dowork_impl() = 0;
   Window m_window{};
+  Viewport m_viewport{};
 
 private:
   std::string m_name{};

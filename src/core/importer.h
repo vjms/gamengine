@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 class StaticMesh;
 
@@ -10,5 +11,5 @@ class StaticMesh;
 class Importer
 {
 public:
-	StaticMesh load_static_mesh(const std::string &path);
+  std::shared_ptr<StaticMesh> load_static_mesh(const std::string &path);
 };

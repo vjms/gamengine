@@ -2,23 +2,19 @@
 
 
 #include <memory>
-#include <string>
 #include <vector>
 #include <utility>
 #include <ranges>
 
 template<typename T>
-class Node
+class TNode : public T
 {
 public:
-  Node(std::string name) : m_name(name) {}
-
-
-  void add_child(const std::shared_ptr<Node<T>> &child)
+  void add_child(const std::shared_ptr<TNode<T>> &child)
   {
     m_children.emplace_back(child);
   }
-  bool remove_child(const std::shared_ptr<Node<T>> &child)
+  bool remove_child(const std::shared_ptr<TNode<T>> &child)
   {
     return std::erase(m_children, child);
   }
@@ -36,9 +32,7 @@ public:
 
   const auto &get_children() const { return m_children; }
   auto get_children_reverse() const { return std::ranges::reverse_view{ m_children }; }
-  const auto &get_name() const { return m_name; }
 
 private:
-  std::string m_name;
-  std::vector<std::shared_ptr<Node<T>>> m_children{};
+  std::vector<std::shared_ptr<TNode<T>>> m_children{};
 };
