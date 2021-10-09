@@ -8,6 +8,7 @@
 
 #include "event.h"
 #include "key_event.h"
+#include "window_resize_event.h"
 
 /**
  * Window to render stuff into.
@@ -34,6 +35,7 @@ public:
 
 
   EventDispatcher<KeyEvent> key_event_dispatcher{};
+  EventDispatcher<WindowResizeEvent> window_resize_event_dispatcher{};
 
 
 private:
@@ -54,8 +56,13 @@ private: /* Static functionality */
 
   // GLFW Callbacks
   static void error_callback(int error, const char *description);
+
+  // input
   static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
   static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
   static void cursor_position_callback(GLFWwindow *window, double xpos, double ypos);
   static void cursor_enter_callback(GLFWwindow *window, int entered);
+
+  // misc
+  static void frame_buffer_size_callback(GLFWwindow *window, int width, int height);
 };

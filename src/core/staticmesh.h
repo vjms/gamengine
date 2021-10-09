@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 
+#include "camera.h"
 #include "renderable.h"
 #include "node.h"
 #include "shader.h"
@@ -43,7 +44,7 @@ public:
 
   virtual bool is_visible() const override { return true; }
 
-  virtual void render() const override
+  virtual void render([[maybe_unused]] Camera *camera) const override
   {
     glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
@@ -116,17 +117,11 @@ public:
   }
 
   virtual bool is_visible() const override { return true; }
-  virtual void render() const override
+  virtual void render(Camera *camera) const override
   {
-
     auto model = get_transform();
-
-
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
-
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    auto &view = camera->get_view_matrix();
+    auto &projection = camera->get_projection_matrix();
 
     for (auto &mesh : m_meshes) {
       auto &shader = mesh.get_shader();
@@ -134,7 +129,7 @@ public:
       shader->set("model", 1, false, glm::value_ptr(model));
       shader->set("projection", 1, false, glm::value_ptr(projection));
       shader->set("view", 1, false, glm::value_ptr(view));
-      mesh.render();
+      mesh.render(camera);
     }
   }
 

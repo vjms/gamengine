@@ -35,6 +35,7 @@ Window::Window()
     glfwSetMouseButtonCallback(m_window, Window::mouse_button_callback);
     glfwSetCursorPosCallback(m_window, Window::cursor_position_callback);
     glfwSetCursorEnterCallback(m_window, Window::cursor_enter_callback);
+    glfwSetFramebufferSizeCallback(m_window, Window::frame_buffer_size_callback);
   }
 }
 
@@ -110,7 +111,7 @@ void Window::error_callback(int error, const char *description)
 void Window::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
   auto custom = static_cast<Window *>(glfwGetWindowUserPointer(window));
-  auto event = KeyEvent{ key, scancode, action, mods };
+  KeyEvent event{ key, scancode, action, mods };
   custom->key_event_dispatcher.process(event);
 }
 
@@ -127,4 +128,18 @@ void Window::cursor_position_callback(GLFWwindow *window, [[maybe_unused]] doubl
 void Window::cursor_enter_callback(GLFWwindow *window, [[maybe_unused]] int entered)
 {
   static_cast<Window *>(glfwGetWindowUserPointer(window));
+}
+
+
+void Window::frame_buffer_size_callback(GLFWwindow *window, int width, int height)
+{
+  auto custom = static_cast<Window *>(glfwGetWindowUserPointer(window));
+  auto current = glfwGetCurrentContext();
+  int old_height, old_width;
+  glfwGetFramebufferSize(custom->m_window, &old_width, &old_height);
+  glfwMakeContextCurrent(custom->m_window);
+  glViewport(0, 0, width, height);
+  glfwMakeContextCurrent(current);
+  WindowResizeEvent event{ width, height, old_width, old_height };
+  custom->window_resize_event_dispatcher.process(event);
 }

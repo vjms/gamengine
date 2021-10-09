@@ -89,6 +89,8 @@ public:
     mesh2->set_shader(prog);
     m_viewport.add_child(mesh);
     m_viewport.add_child(mesh2);
+    auto camera = m_viewport.get_camera();
+    camera->set_position(glm::vec3{ -10.f, 0.f, 0.f });
   }
 
 
@@ -96,10 +98,9 @@ public:
   {
     mesh->set_rotation(glm::vec3{ angle, 0.f, 0.f });
     mesh2->set_rotation(glm::vec3{ 0.f, angle, 0.f });
-
-    mesh2->set_position(glm::vec3{ glm::sin(angle), glm::cos(angle), 0.f } * 3.f);
+    mesh2->set_position(glm::vec3{ glm::sin(angle), 0.f, glm::cos(angle) } * 3.f);
     angle += 0.01f;
-    m_viewport.render();
+    m_viewport.render(nullptr);
   }
 
 private:

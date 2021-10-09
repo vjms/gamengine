@@ -15,6 +15,7 @@ public:
   {
     m_window.set_as_active();
     m_window.key_event_dispatcher.subscribe(&key_event_dispatcher);
+    m_window.window_resize_event_dispatcher.subscribe(&m_viewport);
   }
   void handle()
   {
