@@ -93,13 +93,13 @@ public:
     camera->set_position(glm::vec3{ -10.f, 0.f, 0.f });
   }
 
-
   void dowork_impl() override
   {
     mesh->set_rotation(glm::vec3{ angle, 0.f, 0.f });
     mesh2->set_rotation(glm::vec3{ 0.f, angle, 0.f });
     mesh2->set_position(glm::vec3{ glm::sin(angle), 0.f, glm::cos(angle) } * 3.f);
     angle += 0.01f;
+    m_viewport.get_camera()->set_position(glm::vec3{ -10.f, 0.f, glm::sin(angle / 2.f) * 5.f});
     m_viewport.render(nullptr);
   }
 
