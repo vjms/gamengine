@@ -2,7 +2,7 @@
 
 void Viewport::render() const
 {
-  for (auto &child : get_children()) {
+  for (auto &child : get_children_of_type<Renderable>()) {
     if (child->is_visible()) {
       child->render();
     }

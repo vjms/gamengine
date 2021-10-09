@@ -6,15 +6,16 @@
 #include <utility>
 #include <ranges>
 
-template<typename T>
-class TNode : public T
+class Node
 {
 public:
-  void add_child(const std::shared_ptr<TNode<T>> &child)
+  virtual ~Node() = default;
+
+  void add_child(const std::shared_ptr<Node> &child)
   {
     m_children.emplace_back(child);
   }
-  bool remove_child(const std::shared_ptr<TNode<T>> &child)
+  bool remove_child(const std::shared_ptr<Node> &child)
   {
     return std::erase(m_children, child);
   }
@@ -23,16 +24,25 @@ public:
   {
     return std::erase_if(m_children, pred);
   }
-  bool remove_child(size_t index)
+  void remove_child(size_t index)
   {
-    return m_children.size() <= index
-           && m_children.erase(m_children.begin() + index);
+    if (m_children.size() > index && index >= 0)
+      m_children.erase(m_children.begin() + index);
   }
 
-
+  template<typename Derived>
+  std::vector<std::shared_ptr<Derived>> get_children_of_type() const
+  {
+    std::vector<std::shared_ptr<Derived>> tmp{};
+    for (auto &child : m_children) {
+      auto casted = std::dynamic_pointer_cast<Derived>(child);
+      if (casted) tmp.emplace_back(casted);
+    }
+    return tmp;
+  }
   const auto &get_children() const { return m_children; }
   auto get_children_reverse() const { return std::ranges::reverse_view{ m_children }; }
 
 private:
-  std::vector<std::shared_ptr<TNode<T>>> m_children{};
+  std::vector<std::shared_ptr<Node>> m_children{};
 };

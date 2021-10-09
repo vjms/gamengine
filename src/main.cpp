@@ -99,8 +99,7 @@ public:
 
     mesh2->set_position(glm::vec3{ glm::sin(angle), glm::cos(angle), 0.f } * 3.f);
     angle += 0.01f;
-    mesh->render();
-    mesh2->render();
+    m_viewport.render();
   }
 
 private:

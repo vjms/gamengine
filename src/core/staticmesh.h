@@ -70,7 +70,7 @@ private:
   std::vector<uint32_t> m_indices;
 };
 
-class StaticMesh : public TNode<Renderable>
+class StaticMesh : public Renderable
 {
 public:
   void add_mesh(Mesh mesh)

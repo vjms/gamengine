@@ -7,7 +7,7 @@
 #include "renderable.h"
 #include "node.h"
 
-class Viewport : public TNode<Renderable>
+class Viewport : public Renderable
 {
 public:
   virtual void render() const override;
