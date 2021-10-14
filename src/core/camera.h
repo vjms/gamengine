@@ -21,7 +21,8 @@ public:
 
   const glm::mat4 &get_view_matrix() const;
   const glm::mat4 &get_projection_matrix() const;
-  void update();
+  void update_view();
+  void update_projection();
 
 private:
   

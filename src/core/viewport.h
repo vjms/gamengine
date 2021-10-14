@@ -13,6 +13,7 @@ class Viewport : public Renderable
   , public EventListener<WindowResizeEvent>
 {
 public:
+  Viewport();
   virtual ~Viewport() = default;
 
   virtual void render(Camera *camera) const override;

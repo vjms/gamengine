@@ -50,9 +50,13 @@ void Camera::add_yaw([[maybe_unused]] float amount)
 {
 }
 
-void Camera::update()
+void Camera::update_view()
 {
   m_view_matrix = glm::lookAt(m_position, m_direction, m_up);
+}
+
+void Camera::update_projection()
+{
   switch (m_projection) {
   case Projection::Ortographic: m_projection_matrix = glm::ortho(m_xsize * -0.5f, m_xsize * 0.5f, m_ysize * -0.5f, m_ysize * 0.5f, m_near, m_far); break;
   case Projection::Perspective: m_projection_matrix = glm::perspective(glm::radians(m_fov), m_aspect, m_near, m_far); break;
